@@ -4,11 +4,11 @@ The designed tool analyses the capacity load in remote hosts. The main functiona
 3. Define the regular high load level
 4. Week Forecast of resource's utilisation based on the last period of permanent data structure
 
-Required python packages
-paramiko
-pandas
-matplotlib
-sar
-rpy2
-sklearn
-scipy  
+Required python packages \n
+paramiko \n
+pandas \n
+matplotlib \n
+sar \n
+rpy2 \n
+sklearn \n
+scipy \n 
