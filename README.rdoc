@@ -1,0 +1,14 @@
+The designed tool analyses the capacity load in remote hosts. The main functional modules are designed for
+1. Load the sar data from remote hosts
+2. Parse the memory(RAM) info; cpu load; net_errors; bytes read, bytes write per host
+3. Define the regular high load level
+4. Week Forecast of resource's utilisation based on the last period of permanent data structure
+
+Required python packages
+paramiko
+pandas
+matplotlib
+sar
+rpy2
+sklearn
+scipy  
