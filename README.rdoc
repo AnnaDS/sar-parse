@@ -5,10 +5,10 @@ The designed tool analyses the capacity load in remote hosts. The main functiona
 4. Week Forecast of resource's utilisation based on the last period of permanent data structure
 
 Required python packages
-- paramiko
-- pandas
-- matplotlib
-- sar
-- rpy2
-- sklearn
-- scipy 
+* [paramiko]
+* [pandas]
+* [matplotlib]
+* [sar]
+* [rpy2]
+* [sklearn]
+* [scipy] 
