@@ -126,7 +126,6 @@ def get_util(test, index, plot_clust, min_clust_size=0.1):
     return max(test_h)
  
 def last_period_forecast(data, min_size, min_clust_size=0.1):
-    #print(min_clust_size)
     BreakoutDetection = importr('BreakoutDetection')
     base = importr('base')
     data2 = [x for x in data]
@@ -134,27 +133,30 @@ def last_period_forecast(data, min_size, min_clust_size=0.1):
     points = []
     #print("Length of input data "+str(len(data3)))
     #print("min size"+str(min_size))
-    while len(data3) > min_size:
-        breaks = BreakoutDetection.breakout(base.as_numeric(data3), min_size)
-        #print("Length of data is "+str(len(data3)))
-        #print(breaks[0])
-        if int(np.asarray(breaks[0])[0]) == 0:
-            if len(points)==0:
-                points=[0]
-            break
-        if len(points) > 0:
-            points.append(int(np.asarray(breaks[0])[0]) + points[len(points) - 1])
-        else:
-            points = [int(np.asarray(breaks[0])[0])]
-        data3 = data3[int(np.asarray(breaks[0])[0]):]
+    if len(data)<=min_size:
+        test=data
+    else:
+        while len(data3) > min_size:
+            breaks = BreakoutDetection.breakout(base.as_numeric(data3), min_size)
+            #print("Length of data is "+str(len(data3)))
+            #print(breaks[0])
+            if int(np.asarray(breaks[0])[0]) == 0:
+                if len(points)==0:
+                    points=[0]
+                break
+            if len(points) > 0:
+                points.append(int(np.asarray(breaks[0])[0]) + points[len(points) - 1])
+            else:
+                points = [int(np.asarray(breaks[0])[0])]
+            data3 = data3[int(np.asarray(breaks[0])[0]):]
 
-    #print(points)
-    #print(len(data))
-    test = data[points[len(points) - 1]:]
-    i = 1
-    while len(test) < min_size:
-        test = data[points[len(points) - i]:]
-        i=i+1
+        #print(points)
+        #print(len(data))
+        test = data[points[len(points) - 1]:]
+        i = 1
+        while len(test) < min_size:
+            test = data[points[len(points) - i]:]
+            i=i+1
         
     clust_n=6
 
@@ -219,8 +221,10 @@ def last_period_forecast(data, min_size, min_clust_size=0.1):
     pred_data = [x for x in pred_data.ravel()]
     
     res=[max(res[i],pred_data[i]) for i in range(len(res))]
-
-    return res, np.std(test_h), points[len(points) - 1]
+    if len(points)>0:
+        return res, np.std(test_h), points[len(points) - 1]
+    else:
+        return res, np.std(test_h), len(data)
 
 
 def forecast_on_sar(host, user, min_size=566, path=os.getcwd(), start=0, end=0, plot_clust=True):
@@ -240,10 +244,12 @@ def forecast_on_sar(host, user, min_size=566, path=os.getcwd(), start=0, end=0, 
         #print(param)
         input_data = ID[param][0]
         mem = pd.read_csv(path+host+"/" + input_data + ".csv", index_col=False)
-        if start>0:
+        if start!="":
             mem=mem[mem.time>start]
-        if end>0:
+        if end!="":
             mem=mem[mem.time<end]
+        if len(mem)<10:
+            break
         #print(mem.head())
         #print(input_data)
         if input_data=="cpu_data":
